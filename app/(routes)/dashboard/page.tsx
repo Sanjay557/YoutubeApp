@@ -1,5 +1,6 @@
 import React from 'react'
 import WelcomeBanner from './_components/WelcomeBanner'
+import FeatureList from './_components/FeatureList'
 
 function Dashboard() {
     return (
@@ -7,6 +8,7 @@ function Dashboard() {
             {/* Welcome Banner */}
             <WelcomeBanner/>
             {/* Feature List */}
+            <FeatureList/>
         </div>
         
     )
