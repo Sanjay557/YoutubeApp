@@ -7,7 +7,6 @@ import {
 import Provider from "./provider";
 
 
-
 const outfit = Outfit({subsets : ['latin']})
 
 export const metadata: Metadata = {
