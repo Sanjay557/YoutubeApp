@@ -8,6 +8,10 @@ function AiThumbnailGenerator() {
     const [referenceImage, setReferenceImage] = useState<any>()
     const [faceImage, setFaceImage] = useState<any>()
 
+    const onHandleFileChange = (field:string, e:any) => {
+
+    }
+
   return (
     <div>
         <div className='px-10 md:px-20 lg:px-40'>
@@ -34,7 +38,8 @@ function AiThumbnailGenerator() {
                         <h2>Reference Image</h2>
                     </div>
                 </label>
-                    <input type='file' id='referenceImageUpload' className='hidden' />
+                    <input type='file' id='referenceImageUpload' className='hidden' 
+                    onChange={(e) => onHandleFileChange('referenceImage', e )}/>
                     <label htmlFor='includeFace' className='w-full'>
                         <div className='p-4 w-full border rounded-xl bg-secondary flex gap-2 
                         items-center justify-center hover:scale-105 transition-all cursor-pointer'>
@@ -42,7 +47,8 @@ function AiThumbnailGenerator() {
                             <h2>Include Face</h2>
                         </div>
                     </label>
-                    <input type='file' id='includeFace' className='hidden' />
+                    <input type='file' id='includeFace' className='hidden' 
+                    onChange={(e) => onHandleFileChange('faceImage', e )}/>
             </div>
 
         </div>
