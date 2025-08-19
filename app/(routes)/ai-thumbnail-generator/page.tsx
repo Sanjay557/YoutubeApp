@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowUp, ImagePlus, User } from 'lucide-react'
+import { ArrowUp, Delete, ImagePlus, User, X } from 'lucide-react'
 import Image from 'next/image'
 import React, { useState } from 'react'
 
@@ -50,8 +50,12 @@ function AiThumbnailGenerator() {
                         <h2>Reference Image</h2>
                     </div>
                     :
-                    <Image src={referenceImagePreview} alt='Reference Image' width={100} height={100} 
-                    className='w-[70px] h-[70px] object-cover rounded-sm' /> 
+                    <div className='relative'>
+                        <X className='absolute' onClick={() => setReferenceImagePreview(undefined)}/>
+                        <Image src={referenceImagePreview} alt='Reference Image' width={100} height={100} 
+                        className='w-[70px] h-[70px] object-cover rounded-sm' /> 
+                    </div>
+                    
                     }
                 </label>
                     <input type='file' id='referenceImageUpload' className='hidden' 
@@ -63,8 +67,12 @@ function AiThumbnailGenerator() {
                             <h2>Include Face</h2>
                         </div> 
                         :
-                        <Image src={faceImagePreview} alt='Face Image' width={100} height={100}
-                        className='w-[70px] h-[70px] object-cover rounded-sm' />
+                        <div className='relative'>
+                            <X className='absolute' onClick={() => setFaceImagePreview(undefined)}/>
+                            <Image src={faceImagePreview} alt='Face Image' width={100} height={100}
+                            className='w-[70px] h-[70px] object-cover rounded-sm' />
+                        </div>
+                        
                         }
                     </label>
                     <input type='file' id='includeFace' className='hidden' 
