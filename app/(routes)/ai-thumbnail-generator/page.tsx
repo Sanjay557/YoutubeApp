@@ -1,15 +1,27 @@
 "use client"
 
 import { ArrowUp, ImagePlus, User } from 'lucide-react'
+import Image from 'next/image'
 import React, { useState } from 'react'
 
 function AiThumbnailGenerator() {
     const [userInput, setUserInput] = useState<string>()
     const [referenceImage, setReferenceImage] = useState<any>()
     const [faceImage, setFaceImage] = useState<any>()
+    const [referenceImagePreview, setReferenceImagePreview] = useState<string>()
+    const [faceImagePreview, setFaceImagePreview] = useState<string>()
 
     const onHandleFileChange = (field:string, e:any) => {
+        const selectedFile = e.target.files[0]
 
+        if(field == 'referenceImage'){
+            setReferenceImage(selectedFile)
+            setReferenceImagePreview(URL.createObjectURL(selectedFile))
+        }
+        else{
+            setFaceImage(selectedFile)
+            setFaceImagePreview(URL.createObjectURL(selectedFile))
+        }
     }
 
   return (
@@ -32,20 +44,28 @@ function AiThumbnailGenerator() {
 
             <div className='mt-3 flex gap-3'>
                 <label htmlFor='referenceImageUpload' className='w-full'>
-                    <div className='p-4 w-full border rounded-xl bg-secondary flex gap-2 
+                    {!referenceImagePreview ? <div className='p-4 w-full border rounded-xl bg-secondary flex gap-2 
                     items-center justify-center hover:scale-105 transition-all cursor-pointer'>
                         <ImagePlus />
                         <h2>Reference Image</h2>
                     </div>
+                    :
+                    <Image src={referenceImagePreview} alt='Reference Image' width={100} height={100} 
+                    className='w-[70px] h-[70px] object-cover rounded-sm' /> 
+                    }
                 </label>
                     <input type='file' id='referenceImageUpload' className='hidden' 
                     onChange={(e) => onHandleFileChange('referenceImage', e )}/>
                     <label htmlFor='includeFace' className='w-full'>
-                        <div className='p-4 w-full border rounded-xl bg-secondary flex gap-2 
+                        {!faceImagePreview ? <div className='p-4 w-full border rounded-xl bg-secondary flex gap-2 
                         items-center justify-center hover:scale-105 transition-all cursor-pointer'>
                             <User/>
                             <h2>Include Face</h2>
-                        </div>
+                        </div> 
+                        :
+                        <Image src={faceImagePreview} alt='Face Image' width={100} height={100}
+                        className='w-[70px] h-[70px] object-cover rounded-sm' />
+                        }
                     </label>
                     <input type='file' id='includeFace' className='hidden' 
                     onChange={(e) => onHandleFileChange('faceImage', e )}/>
