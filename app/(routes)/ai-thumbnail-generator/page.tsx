@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowUp, Delete, ImagePlus, User, X } from 'lucide-react'
+import { ArrowUp, ImagePlus, User, X } from 'lucide-react'
 import Image from 'next/image'
 import React, { useState } from 'react'
 
