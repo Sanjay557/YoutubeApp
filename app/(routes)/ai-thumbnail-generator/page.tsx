@@ -1,5 +1,6 @@
 "use client"
 
+import axios from 'axios'
 import { ArrowUp, ImagePlus, User, X } from 'lucide-react'
 import Image from 'next/image'
 import React, { useState } from 'react'
@@ -24,6 +25,19 @@ function AiThumbnailGenerator() {
         }
     }
 
+    const onSubmit = async() => {
+        const formData = new FormData()
+        userInput && formData.append('userInput' , userInput)
+        referenceImage && formData.append('refImage' , referenceImage)
+        faceImage && formData.append('faceImage' , faceImage)
+
+
+        //POST API CALL
+        const result = await axios.post('/api/generate-thumbnail', formData)
+
+        console.log(result.data)
+    }
+
   return (
     <div>
         <div className='px-10 md:px-20 lg:px-40'>
@@ -37,7 +51,8 @@ function AiThumbnailGenerator() {
                 className='w-full outline-0 bg-transparent' 
                 placeholder='Enter Your Youtube Video Title or Description' 
                 onChange={(event) => setUserInput(event.target.value)}/>
-                <div className='p-3 bg-gradient-to-t from-red-500 to-orange-500 rounded-full'>
+                <div className='p-3 bg-gradient-to-t from-red-500 
+                to-orange-500 rounded-full cursor-pointer' onClick={onSubmit}>
                     <ArrowUp />
                 </div>
             </div>
