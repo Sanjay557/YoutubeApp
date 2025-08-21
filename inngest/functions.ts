@@ -9,13 +9,13 @@ export const helloWorld = inngest.createFunction(
   },
 );
 
-export const GenerateThumbnail = inngest.createFunction(
+export const GenerateAiThumbnail = inngest.createFunction(
   {id: 'ai/generate-thumbnail'},
   {event : 'ai/generate-thumbnail'},
   async({event, step}) => {
     const {userEmail, refImage, faceImage, userInput} = await event.data
     //Upload Image to cloud /ImageKit
-
+    
     
     //Generate AI promopt from AI model
 
@@ -27,6 +27,8 @@ export const GenerateThumbnail = inngest.createFunction(
 
 
     //Save Record to Database
+
+    return userEmail
 
   }
 )

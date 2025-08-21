@@ -1,6 +1,7 @@
+import { inngest } from "@/inngest/client";
 import { currentUser } from "@clerk/nextjs/server";
 import { File } from "buffer";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     const formData = await req.formData()
@@ -28,4 +29,13 @@ export async function POST(req: NextRequest) {
         faceImage : faceImage ? await getFileBufferData(faceImage) : null,
         userEmail : user?.primaryEmailAddress?.emailAddress
     }
+
+    const result = await inngest.send({
+        name: "ai/generate-thumbnail",
+        data: inputData
+    });
+
+    return NextResponse.json({ result })
+
+
 }
