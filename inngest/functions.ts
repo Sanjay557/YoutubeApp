@@ -1,7 +1,11 @@
+import { pgTable } from "drizzle-orm/pg-core";
 import { inngest } from "./client";
 import ImageKit from "imagekit";
 import OpenAI from 'openai';
 import Replicate from 'replicate'
+import { db } from "@/configs/db";
+import {AiThumbnailTable } from "@/configs/schema";
+import moment from 'moment'
 
 export const helloWorld = inngest.createFunction(
   { id: "hello-world" },
@@ -94,7 +98,7 @@ export const GenerateAiThumbnail = inngest.createFunction(
     })
 
     //Generate AI Image
-    const generateImage = await step.run('Generate Image' , async()=> {
+    const generateThumbnailImage = await step.run('Generate Image' , async()=> {
       const input = {
         prompt: generateThumbnailPrompt,
         resolution: "None",
@@ -113,10 +117,34 @@ export const GenerateAiThumbnail = inngest.createFunction(
 
     //Save Image to cloud
 
+    const uploadThumbnail = await step.run('Upload Thumbnail' , async() => {
+      const imageRef = await imageKit.upload({
+        file:generateThumbnailImage,
+        fileName:Date.now()+ '.png',
+        isPublished:true,
+        useUniqueFileName:false
+      })
+
+      return imageRef.url
+    })
+
 
     //Save Record to Database
+    const SaveToDB =await step.run('SaveToDb' , async() => {
+      const result =await db.insert(AiThumbnailTable).values({
+          userInput: userInput,
+          thumbnailUrl: uploadThumbnail,
+          createdOn: moment().format('YYYY-MM-DD'),
+          refImage: uploadImageUrls,
+          userEmail: userEmail
+          //@ts-ignore
+      }).returning(AiThumbnailTable)
 
-    return generateImage;
+      return result
+    }) 
+
+
+    return SaveToDB;
 
     //Run the server and check it
   }
