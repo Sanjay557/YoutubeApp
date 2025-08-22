@@ -1,6 +1,7 @@
 import { inngest } from "./client";
 import ImageKit from "imagekit";
 import OpenAI from 'openai';
+import Replicate from 'replicate'
 
 export const helloWorld = inngest.createFunction(
   { id: "hello-world" },
@@ -25,6 +26,10 @@ export const openai = new OpenAI({
   apiKey: process.env.OPENROUTER_API_KEY,
   
 });
+
+export const replicate = new Replicate({
+  auth: process.env.REPLICATE_API_KEY
+})
 
 export const GenerateAiThumbnail = inngest.createFunction(
   { id: "ai/generate-thumbnail" },
@@ -89,14 +94,29 @@ export const GenerateAiThumbnail = inngest.createFunction(
     })
 
     //Generate AI Image
-    
+    const generateImage = await step.run('Generate Image' , async()=> {
+      const input = {
+        prompt: generateThumbnailPrompt,
+        resolution: "None",
+        style_type: "None",
+        aspect_ratio: "16:9",
+        magic_prompt_option: "Auto"
+      };
+
+      const output = await replicate.run("ideogram-ai/ideogram-v3-turbo", { input });
+
+      // To access the file URL:
+      //@ts-ignore
+      return output.url()
+
+    })    
 
     //Save Image to cloud
 
 
     //Save Record to Database
 
-    return generateThumbnailPrompt;
+    return generateImage;
 
     //Run the server and check it
   }
